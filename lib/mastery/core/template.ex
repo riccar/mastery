@@ -21,4 +21,16 @@ defmodule Mastery.Core.Template do
 
   # create a list of words ~w where each of them is an atom: "a" modifier
   defstruct ~w[name category instructions raw compiled generators checker]a
+
+  def new(fields) do
+    # fetch value of key :raw within fields
+    raw = Keyword.fetch!(fields, :raw)
+    # returns the Template struct updating the key compiled with
+    # the value returned after compiling raw
+    # EEx compiles idiomatic Elixir templates
+    struct!(
+      __MODULE__,
+      Keyword.put(fields, :compiled, EEx.compile_string(raw))
+    )
+  end
 end
